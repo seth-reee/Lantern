@@ -1,0 +1,5 @@
+/build/
+/.qmlls.ini
+
+/dist/
+*.pkg.tar.zst

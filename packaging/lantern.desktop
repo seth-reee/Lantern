@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=Lantern
+Comment=IP scanner with hostname resolution and common TCP ports
+Exec=lantern
+Icon=lantern
+Terminal=false
+Categories=Network;Utility;
+Keywords=IP;scanner;LAN;network;ping;
