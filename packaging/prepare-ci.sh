@@ -29,7 +29,7 @@ archive="$pkgname-$pkgver.tar.gz"
 # Only application files: the pinned recipe cannot hash an archive containing itself.
 # Stable metadata makes both architectures and retries use identical source bytes.
 # Use tracked paths only, excluding local build output and sync-conflict files.
-git ls-files -z -- CMakeLists.txt LICENSE README.md resources/lantern.svg src qml tests packaging/lantern.desktop | \
+git ls-files -z -- CMakeLists.txt LICENSE README.md Lantern.png src qml tests packaging/lantern.desktop | \
   tar --null --no-recursion --sort=name --mtime=@0 --owner=0 --group=0 --numeric-owner \
     --transform="s,^,Lantern-$pkgver/," -cf - -T - | gzip -n > "$output_dir/$archive"
 checksum=$(sha256sum "$output_dir/$archive" | cut -d ' ' -f 1)

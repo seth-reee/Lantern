@@ -1,4 +1,4 @@
-# <img src="resources/lantern.svg" width="48" height="48" alt=""> Lantern
+# <img src="Lantern.png" width="48" height="48" alt=""> Lantern
 
 A lightweight IP scanner for [Omarchy](https://omarchy.org/), built with C++ and Qt Quick.
 
@@ -7,6 +7,7 @@ A lightweight IP scanner for [Omarchy](https://omarchy.org/), built with C++ and
 - Scan an IPv4 address, inclusive range, or CIDR subnet.
 - Discover live hosts with ICMP ping and optional common TCP port checks.
 - Resolve hostnames using reverse DNS where available.
+- Show elapsed scan time and available local-network MAC addresses.
 - Show ping response times and open TCP ports as results arrive.
 - Hide dead IPs, search results, and filter by host status.
 - Sort columns, copy host details, and export all results to CSV.
@@ -29,7 +30,7 @@ Launch **Lantern** from the application menu or run `lantern`.
 
 ## Use
 
-Enter one address (`192.168.1.1`), an inclusive range (`192.168.1.1-192.168.1.254`), or CIDR (`192.168.1.0/24`). CIDR excludes network/broadcast addresses except /31 and /32. Maximum 4,096 targets. Local /24 uses the first active non-loopback IPv4 interface, limited to /24 for a manageable default; choose the intended range on machines with multiple interfaces or VPNs.
+Enter one address (`192.168.1.1`), an inclusive range (`192.168.1.1-192.168.1.254`), or CIDR (`192.168.1.0/24`). CIDR excludes network/broadcast addresses except /31 and /32. Maximum 65,536 targets, including full `/16` subnets (65,534 usable addresses). Larger scans use the same bounded host concurrency; elapsed time depends on timeouts and the number of responding hosts. Local /24 uses the first active non-loopback IPv4 interface, limited to /24 for a manageable default; choose the intended range on machines with multiple interfaces or VPNs.
 
 Scan sends one ICMP echo per address using iputils. Optional common-port detection tries TCP connections to 23 ports: 21, 22, 23, 25, 53, 80, 110, 139, 143, 443, 445, 587, 631, 993, 995, 1433, 3306, 3389, 5432, 5900, 8000, 8080, 8443. It checks whether connections open; it does not fingerprint services or scan UDP. The timeout applies to each probe; host concurrency is configurable from 1–64 (default 32).
 
@@ -38,9 +39,11 @@ Scan sends one ICMP echo per address using iputils. Optional common-port detecti
 - **Error:** ping could not execute or reported an operational error, and TCP did not establish liveness. Select the host to see the error.
 - **Cancelled:** not completed when stopped. Partial results remain available.
 
-Reverse DNS is attempted for live hosts with a two-second deadline. A blank name means no reverse DNS name was obtained; not every device publishes one. Ping latency is shown only when ICMP responds. MAC/vendor discovery, NetBIOS/mDNS names, service fingerprinting, and continuous monitoring are not implemented.
+Reverse DNS is attempted for live hosts with a two-second deadline. A blank name means no reverse DNS name was obtained; not every device publishes one. Ping latency is shown only when ICMP responds. MAC addresses are read from completed entries in the Linux ARP table after probing, with local interface addresses also supported. They are available only on the local network; routed hosts and unresolved neighbors remain blank. MAC vendor lookup, NetBIOS/mDNS names, service fingerprinting, and continuous monitoring are not implemented.
 
-Enable **Hide dead IPs** to hide hosts with **No reply** status while retaining them in scan totals and CSV exports. Filter by IP/name/port/status, click column headings to sort, right-click to copy a host, or double-click to copy its IP. Ctrl+F focuses search; Escape stops a running scan. CSV export includes **all** rows, including cancelled/error rows, regardless of view filters, with proper quoting and atomic writes.
+Enable **Hide dead IPs** to hide hosts with **No reply** status while retaining them in scan totals and CSV exports. Filter by IP/name/MAC/port/status, click column headings to sort, right-click to copy a host, or double-click to copy its IP. Right-click a host and choose **Add to Portalview** to open its RDP connection editor with the IP and hostname filled in. Enter the username and save in Portalview. An existing connection to that IP on port 3389 opens for editing instead of creating a duplicate. This requires an updated Portalview with `--add-host` support on your PATH; no connection file is edited by Lantern.
+
+Ctrl+F focuses search; Escape stops a running scan. CSV export includes **all** rows, including cancelled/error rows, regardless of view filters, with proper quoting and atomic writes.
 
 ## Build
 
