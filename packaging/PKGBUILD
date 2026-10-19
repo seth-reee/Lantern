@@ -1,5 +1,5 @@
 pkgname=lantern
-pkgver=0.1.0
+pkgver=0.1.1
 pkgrel=1
 pkgdesc='Qt Quick IP scanner for Omarchy with hostnames and common TCP ports'
 arch=('x86_64' 'aarch64')
@@ -11,7 +11,7 @@ makedepends=('cmake' 'ninja' 'gcc')
 options=('!debug')
 # SRCDEST can hold the pinned archive before the release is published.
 source=("$pkgname-$pkgver.tar.gz::$url/releases/download/v$pkgver/$pkgname-$pkgver.tar.gz")
-sha256sums=('bfd9480bde7ace4014f64b1a30b6b01fa716bc52a3b84c0e29426eabd9cfea6f')
+sha256sums=('5c06009d68ccf0823e038a51be7dc517596bde47debe52ff97337dffabc8d636')
 
 build() {
   cmake -S "$srcdir/Lantern-$pkgver" -B "build-$pkgver" -G Ninja \
